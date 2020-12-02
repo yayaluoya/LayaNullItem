@@ -1,0 +1,35 @@
+{
+  "package": "com.laya.laya",
+  "name": "laya",
+  "icon": "/favicon.png",
+  "versionName": "1.0",
+  "versionCode": 10,
+  "minPlatformVersion": 1063,
+  "deviceOrientation": "portrait",
+  "type": "game",
+  "networkTimeout": {
+    "request": 5000,
+    "connectSocket": 5000,
+    "uploadFile": 5000,
+    "downloadFile": 5000
+  },
+  "config": {
+    "logLevel": "off",
+    "debug": true
+  },
+  "display": {
+    "statusbar": "false",
+    "titleBar": ""
+  },
+  "orientation": "portrait",
+  "thirdEngine": {
+    "laya": "2.7.1"
+  },
+  "plugins": {
+    "laya-library": {
+      "version": "2.7.1",
+      "provider": "3a3e507450502c41af645a0e05d521a2",
+      "path": "laya-library"
+    }
+  }
+}

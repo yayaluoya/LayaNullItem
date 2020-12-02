@@ -1,3 +1,4 @@
+import PlatformManager from "../aTGame/Platform/PlatformManager";
 import FGUI_splash from "./FGUI_splash";
 
 /**
@@ -74,7 +75,9 @@ export default class test {
         _ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
         //
         this.asyncTest();
-        //设置sader
+        //初始化平台
+        PlatformManager.instance.init();
+        PlatformManager.instance.initPlatform();
     }
 
     //

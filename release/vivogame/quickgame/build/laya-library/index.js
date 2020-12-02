@@ -1,0 +1,13 @@
+require("./bytebuffer.js");
+require("./laya.ani.js");
+require("./laya.core.js");
+require("./laya.d3.js");
+require("./laya.device.js");
+require("./laya.html.js");
+require("./laya.particle.js");
+require("./laya.physics.js");
+require("./laya.physics3D.js");
+require("./laya.tiledmap.js");
+require("./laya.ui.js");
+require("./worker.js");
+require("./workerloader.js");

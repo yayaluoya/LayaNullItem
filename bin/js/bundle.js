@@ -198,6 +198,863 @@
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
 
+    class BasePlatformData {
+        constructor() {
+            this.appId = '';
+            this.appKey = '';
+            this.adUnitId = '';
+        }
+    }
+
+    class DefaultPlatformData extends BasePlatformData {
+    }
+
+    class BDPlatformData extends DefaultPlatformData {
+    }
+
+    class OPPOPlatformData extends DefaultPlatformData {
+    }
+
+    class QQPlatformData extends DefaultPlatformData {
+    }
+
+    class QTTPlatformData extends DefaultPlatformData {
+    }
+
+    class TTPlatformData extends DefaultPlatformData {
+    }
+
+    class VIVOPlatformData extends DefaultPlatformData {
+    }
+
+    class WXPlatformData extends DefaultPlatformData {
+    }
+
+    class ConsoleConst {
+    }
+    ConsoleConst.logStyle = `
+        color: #fff;
+        background-color: #8d93ab;
+        border-radius: 3px;
+        line-height: 15px;
+        `;
+    ConsoleConst.comStyle = `
+        color: #fff;
+        background-color: #ade498;
+        border-radius: 3px;
+        line-height: 15px;
+        `;
+    ConsoleConst.warnStyle = `
+        color: #5c6e06;
+        background-color: #ffa931;
+        border-radius: 3px;
+        line-height: 15px;
+        `;
+    ConsoleConst.errorStyle = `
+        color: #fff;
+        background-color: #ec0101;
+        border-radius: 3px;
+        line-height: 15px;
+        `;
+    ConsoleConst.platformStyle = `
+        color: #52575d;
+        background-color: #e3fdfd;
+        border-radius: 3px;
+        line-height: 15px;
+        `;
+
+    class ConsoleEx {
+        static log(...any) {
+            console.log(`%c ${any}`, ConsoleConst.logStyle);
+        }
+        static warn(...any) {
+            console.log(`%c ${any}`, ConsoleConst.warnStyle);
+        }
+        static error(...any) {
+            console.log(`%c ${any}`, ConsoleConst.errorStyle);
+        }
+        static packLog(...any) {
+            return [`%c ${any} `, ConsoleConst.logStyle];
+        }
+        static comLog(...any) {
+            return [`%c ${any} `, ConsoleConst.comStyle];
+        }
+        static packWarn(...any) {
+            return [`%c 警告: ${any} `, ConsoleConst.warnStyle];
+        }
+        static packError(...any) {
+            return [`%c 错误: ${any} `, ConsoleConst.errorStyle];
+        }
+        static packPlatform(...any) {
+            return [`%c 平台: ${any} `, ConsoleConst.platformStyle];
+        }
+    }
+
+    class BDAdManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        createBannerAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        hideBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        destroyBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        setBannerAd(_width, _top, _left) {
+            throw new Error("Method not implemented.");
+        }
+        createRewardedVideoAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showRewardedVideoAd() {
+            throw new Error("Method not implemented.");
+        }
+        showInterstitialAd() {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class WXDeviceManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        Vibrate(isLong) {
+            console.log("调用震动", isLong);
+            if (this.Platform.base) {
+                if (isLong) {
+                    Laya.timer.callLater(wx, wx.vibrateLong, [null]);
+                }
+                else {
+                    Laya.timer.callLater(wx, wx.vibrateShort, [null]);
+                }
+            }
+        }
+    }
+
+    class BDDeviceManager extends WXDeviceManager {
+    }
+
+    class WXPageManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        showToast(_mes, _time) {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class BDPageManager extends WXPageManager {
+    }
+
+    class WXRecordManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        Start(duration) {
+            throw new Error("Method not implemented.");
+        }
+        Stop(caller, callfunc) {
+            throw new Error("Method not implemented.");
+        }
+        Pause() {
+            throw new Error("Method not implemented.");
+        }
+        Resume() {
+            throw new Error("Method not implemented.");
+        }
+        Share(callder, okCallbackFunc) {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class BDRecordManager extends WXRecordManager {
+    }
+
+    class WXShareManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        ShareAppMessage(obj, onSuccess, onFailed) {
+        }
+    }
+
+    class BDShareManager extends WXShareManager {
+    }
+
+    class BasePlatform {
+        Init(_platformData) {
+            if (!_platformData) {
+                console.error('平台数据为空');
+            }
+            this.platformData = _platformData;
+            if (!this.platformType) {
+                console.error('没有设置平台类型');
+            }
+            if (!this.base) {
+                console.error('没有初始化平台句柄！', this.platformType);
+            }
+            if (!this.platformData) {
+                console.error('没有初始化平台数据！', this.platformType);
+            }
+            if (this.recordManager) {
+                this.recordManager.init(this);
+            }
+            else {
+                console.error('没有初始化平台视频录制管理器！', this.platformType);
+            }
+            if (this.ADManager) {
+                this.ADManager.init(this);
+            }
+            else {
+                console.error('没有初始化平台广告管理器！', this.platformType);
+            }
+            if (this.shareManager) {
+                this.shareManager.init(this);
+            }
+            else {
+                console.error('没有初始化平台分享管理器！', this.platformType);
+            }
+            if (this.deviceManager) {
+                this.deviceManager.init(this);
+            }
+            else {
+                console.error('没有初始化平台设备管理器！', this.platformType);
+            }
+        }
+        LoadSubpackage(name, onSuccess, onFailed, onProgress) { }
+    }
+
+    var EPlatformKey;
+    (function (EPlatformKey) {
+        EPlatformKey["WX"] = "wx";
+        EPlatformKey["TT"] = "tt";
+        EPlatformKey["QQ"] = "qq";
+        EPlatformKey["VIVO"] = "qg";
+        EPlatformKey["OPPO"] = "qg";
+        EPlatformKey["BD"] = "swan";
+        EPlatformKey["KG"] = "kg";
+        EPlatformKey["Alipay"] = "alipay";
+        EPlatformKey["HW"] = "hw";
+        EPlatformKey["QTT"] = "qttGame";
+    })(EPlatformKey || (EPlatformKey = {}));
+
+    var EPlatformType;
+    (function (EPlatformType) {
+        EPlatformType["None"] = "EPlatformType_None";
+        EPlatformType["Web"] = "EPlatformType_Web";
+        EPlatformType["WX"] = "EPlatformType_WX";
+        EPlatformType["TT"] = "EPlatformType_TT";
+        EPlatformType["QQ"] = "EPlatformType_QQ";
+        EPlatformType["VIVO"] = "EPlatformType_VIVO";
+        EPlatformType["OPPO"] = "EPlatformType_OPPO";
+        EPlatformType["BD"] = "EPlatformType_BD";
+        EPlatformType["KG"] = "EPlatformType_KG";
+        EPlatformType["Alipay"] = "EPlatformType_Alipay";
+        EPlatformType["HW"] = "EPlatformType_HW";
+        EPlatformType["QTT"] = "EPlatformType_QTT";
+    })(EPlatformType || (EPlatformType = {}));
+
+    class BDPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = window[EPlatformKey.BD];
+            this.platformType = EPlatformType.BD;
+            this.platformData = new BDPlatformData();
+            this.recordManager = new BDRecordManager();
+            this.ADManager = new BDAdManager();
+            this.shareManager = new BDShareManager();
+            this.deviceManager = new BDDeviceManager();
+            this.pageManager = new BDPageManager();
+        }
+    }
+
+    class DefaultAdManager {
+        init(_platform) {
+            this.Platform = _platform;
+            this.ifShowRewardedVideoAd = true;
+        }
+        createBannerAd(_data) {
+        }
+        showBannerAd() {
+            console.log('显示BannerAd');
+        }
+        hideBannerAd() {
+            console.log('隐藏BannerAd');
+        }
+        destroyBannerAd() {
+            console.log('删除BannerAd');
+        }
+        setBannerAd(_width, _top, _left) {
+        }
+        createRewardedVideoAd(_data) {
+        }
+        showRewardedVideoAd() {
+            console.log('显示激励广告');
+            return new Promise((r) => {
+                r(true);
+            });
+        }
+        showInterstitialAd() {
+            console.log('显示插屏广告');
+        }
+    }
+
+    class DefaultDeviceManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        Vibrate(isLong) {
+            if (!navigator.vibrate) {
+                console.log("不支持设备震动！");
+                return;
+            }
+            if (isLong) {
+                navigator.vibrate(15);
+            }
+            else {
+                navigator.vibrate(400);
+            }
+        }
+    }
+
+    class DefaultPageManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        showToast(_mes, _time) {
+            console.log(...ConsoleEx.packLog('平台：', _mes));
+        }
+    }
+
+    class DefaultRecordManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        Start(duration) {
+            console.log('开始录屏');
+        }
+        Stop(caller, callfunc) {
+            console.log('停止录屏');
+        }
+        Pause() {
+            console.log('暂停录屏');
+        }
+        Resume() {
+            console.log('重新录屏');
+        }
+        Share(callder, okCallbackFunc) {
+            console.log('分享录屏');
+        }
+    }
+
+    class DefaultShareManager {
+        init(_platform) {
+            this.Platform = _platform;
+        }
+        ShareAppMessage(obj, onSuccess, onFailed) {
+            console.log('平台分享消息：', obj);
+            onSuccess.run();
+        }
+    }
+
+    class DefaultPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = {};
+            this.platformType = EPlatformType.None;
+            this.platformData = new DefaultPlatformData();
+            this.recordManager = new DefaultRecordManager();
+            this.ADManager = new DefaultAdManager();
+            this.shareManager = new DefaultShareManager();
+            this.deviceManager = new DefaultDeviceManager();
+            this.pageManager = new DefaultPageManager();
+        }
+    }
+
+    class OPPOAdManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        createBannerAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        hideBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        destroyBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        setBannerAd(_width, _top, _left) {
+            throw new Error("Method not implemented.");
+        }
+        createRewardedVideoAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showRewardedVideoAd() {
+            throw new Error("Method not implemented.");
+        }
+        showInterstitialAd() {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class OPPODeviceManager extends WXDeviceManager {
+    }
+
+    class OPPOPageManager extends WXPageManager {
+    }
+
+    class OPPORecordManager extends WXRecordManager {
+    }
+
+    class OPPOShareManager extends WXShareManager {
+    }
+
+    class OPPOPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = window[EPlatformKey.OPPO];
+            this.platformType = EPlatformType.OPPO;
+            this.platformData = new OPPOPlatformData();
+            this.recordManager = new OPPORecordManager();
+            this.ADManager = new OPPOAdManager();
+            this.shareManager = new OPPOShareManager();
+            this.deviceManager = new OPPODeviceManager();
+            this.pageManager = new OPPOPageManager();
+        }
+    }
+
+    class QQAdManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        createBannerAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        hideBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        destroyBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        setBannerAd(_width, _top, _left) {
+            throw new Error("Method not implemented.");
+        }
+        createRewardedVideoAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showRewardedVideoAd() {
+            throw new Error("Method not implemented.");
+        }
+        showInterstitialAd() {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class QQDeviceManager extends WXDeviceManager {
+    }
+
+    class QQPageManager extends WXPageManager {
+    }
+
+    class QQRecordManager extends WXRecordManager {
+    }
+
+    class QQShareManager extends WXShareManager {
+    }
+
+    class QQPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = window[EPlatformKey.QQ];
+            this.platformType = EPlatformType.QQ;
+            this.platformData = new QQPlatformData();
+            this.recordManager = new QQRecordManager();
+            this.ADManager = new QQAdManager();
+            this.shareManager = new QQShareManager();
+            this.deviceManager = new QQDeviceManager();
+            this.pageManager = new QQPageManager();
+        }
+    }
+
+    class QTTAdManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        createBannerAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        hideBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        destroyBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        setBannerAd(_width, _top, _left) {
+            throw new Error("Method not implemented.");
+        }
+        createRewardedVideoAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showRewardedVideoAd() {
+            throw new Error("Method not implemented.");
+        }
+        showInterstitialAd() {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class QTTDeviceManager extends WXDeviceManager {
+    }
+
+    class QTTPageManager extends WXPageManager {
+    }
+
+    class QTTRecordManager extends WXRecordManager {
+    }
+
+    class QTTShareManager extends WXShareManager {
+    }
+
+    class QTTPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = window[EPlatformKey.QTT];
+            this.platformType = EPlatformType.QTT;
+            this.platformData = new QTTPlatformData();
+            this.recordManager = new QTTRecordManager();
+            this.ADManager = new QTTAdManager();
+            this.shareManager = new QTTShareManager();
+            this.deviceManager = new QTTDeviceManager();
+            this.pageManager = new QTTPageManager();
+        }
+    }
+
+    class TTAdManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        createBannerAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        hideBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        destroyBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        setBannerAd(_width, _top, _left) {
+            throw new Error("Method not implemented.");
+        }
+        createRewardedVideoAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showRewardedVideoAd() {
+            throw new Error("Method not implemented.");
+        }
+        showInterstitialAd() {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class TTDeviceManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        Vibrate(isLong) {
+            if (!this.Platform.base) {
+                console.log(...ConsoleEx.packError('不存在window[\'tt\']'));
+                return;
+            }
+            console.log("调用震动", isLong);
+            if (isLong) {
+                this.Platform.base.vibrateLong({
+                    success(res) { },
+                    fail(res) {
+                        console.error("调用震动失败", res);
+                    },
+                    complete(res) { }
+                });
+            }
+            else {
+                this.Platform.base.vibrateShort({
+                    success(res) { },
+                    fail(res) {
+                        console.error("调用震动失败", res);
+                    },
+                    complete(res) { }
+                });
+            }
+        }
+    }
+
+    class TTPageManager extends WXPageManager {
+    }
+
+    class TTRecordManager extends WXRecordManager {
+    }
+
+    class TTShareManager extends WXShareManager {
+    }
+
+    class TTPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = window[EPlatformKey.TT];
+            this.platformType = EPlatformType.TT;
+            this.platformData = new TTPlatformData();
+            this.recordManager = new TTRecordManager();
+            this.ADManager = new TTAdManager();
+            this.shareManager = new TTShareManager();
+            this.deviceManager = new TTDeviceManager();
+            this.pageManager = new TTPageManager();
+        }
+    }
+
+    class VIVOAdManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        createBannerAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        hideBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        destroyBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        setBannerAd(_width, _top, _left) {
+            throw new Error("Method not implemented.");
+        }
+        createRewardedVideoAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showRewardedVideoAd() {
+            throw new Error("Method not implemented.");
+        }
+        showInterstitialAd() {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class VIVODeviceManager extends WXDeviceManager {
+    }
+
+    class VIVOPageManager extends WXPageManager {
+    }
+
+    class VIVORecordManager extends WXRecordManager {
+    }
+
+    class VIVOShareManager extends WXShareManager {
+    }
+
+    class VIVOPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = window[EPlatformKey.VIVO];
+            this.platformType = EPlatformType.VIVO;
+            this.platformData = new VIVOPlatformData();
+            this.recordManager = new VIVORecordManager();
+            this.ADManager = new VIVOAdManager();
+            this.shareManager = new VIVOShareManager();
+            this.deviceManager = new VIVODeviceManager();
+            this.pageManager = new VIVOPageManager();
+        }
+    }
+
+    class WXAdManager {
+        init(_platform) {
+            throw new Error("Method not implemented.");
+        }
+        createBannerAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        hideBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        destroyBannerAd() {
+            throw new Error("Method not implemented.");
+        }
+        setBannerAd(_width, _top, _left) {
+            throw new Error("Method not implemented.");
+        }
+        createRewardedVideoAd(_data) {
+            throw new Error("Method not implemented.");
+        }
+        showRewardedVideoAd() {
+            throw new Error("Method not implemented.");
+        }
+        showInterstitialAd() {
+            throw new Error("Method not implemented.");
+        }
+    }
+
+    class WXPlatform extends BasePlatform {
+        constructor() {
+            super(...arguments);
+            this.base = window['wx'];
+            this.platformType = EPlatformType.WX;
+            this.platformData = new WXPlatformData();
+            this.recordManager = new WXRecordManager();
+            this.ADManager = new WXAdManager();
+            this.shareManager = new WXShareManager();
+            this.deviceManager = new WXDeviceManager();
+            this.pageManager = new WXPageManager();
+        }
+    }
+
+    class RootClassProxy {
+        static get Datas() {
+            return this.m_datas;
+        }
+        static set Datas(_data) {
+            this.m_datas = _data;
+        }
+        static get Handlers() {
+            return this.m_handlers;
+        }
+        static set Handlers(_handler) {
+            this.m_handlers = _handler;
+        }
+    }
+    RootClassProxy.m_ifSetProxy = false;
+
+    class PlatformManagerProxy extends RootClassProxy {
+        static get instance() {
+            if (this._instance == null) {
+                this._instance = new PlatformManagerProxy();
+            }
+            return this._instance;
+        }
+        get PlatformInstance() {
+            if (!this.m_platformInstance) {
+                console.log(...ConsoleEx.packError('还没有设置过平台实例代理！'));
+            }
+            return this.m_platformInstance;
+        }
+        set PlatformInstance(_instance) {
+            this.m_platformInstance = _instance;
+        }
+        static get platformStr() {
+            return PlatformManagerProxy.GetPlatformStr(this._instance.m_platformInstance.platformType);
+        }
+        static GetPlatformStr(platformEnum) {
+            switch (platformEnum) {
+                case EPlatformType.None:
+                    return "未识别";
+                case EPlatformType.Web:
+                    return "网页";
+                case EPlatformType.BD:
+                    return "百度";
+                case EPlatformType.OPPO:
+                    return "Oppo";
+                case EPlatformType.QQ:
+                    return "QQ";
+                case EPlatformType.TT:
+                    return "头条";
+                case EPlatformType.VIVO:
+                    return "Vivo";
+                case EPlatformType.WX:
+                    return "微信";
+                case EPlatformType.QTT:
+                    return "趣头条";
+                default:
+                    return "未定义" + platformEnum;
+            }
+        }
+    }
+
+    class PlatformManager {
+        static get instance() {
+            if (this._instance == null) {
+                this._instance = new PlatformManager();
+            }
+            return this._instance;
+        }
+        static get PlatformInstance() {
+            if (!this.instance.m_platformInstance) {
+                console.log(...ConsoleEx.packError('还没有设置过平台实例代理！'));
+            }
+            return this.instance.m_platformInstance;
+        }
+        init() {
+            if (this.m_platformInstance != null) {
+                console.error(...ConsoleEx.packError("已调用过平台创建为", PlatformManagerProxy.GetPlatformStr(this.m_platformInstance.platformType), "不能重复创建"));
+                return this.m_platformInstance;
+            }
+            let isQTT = window["qttGame"] != null;
+            let isTT = window["tt"] != null;
+            let result;
+            if (isTT) {
+                result = new TTPlatform();
+                this.m_platformData = new TTPlatformData();
+            }
+            else if (Laya.Browser.onMiniGame) {
+                result = new WXPlatform();
+                this.m_platformData = new WXPlatformData();
+            }
+            else if (Laya.Browser.onBDMiniGame) {
+                result = new BDPlatform();
+                this.m_platformData = new BDPlatformData();
+            }
+            else if (isQTT) {
+                result = new QTTPlatform();
+                this.m_platformData = new QTTPlatformData();
+            }
+            else if (Laya.Browser.onQQMiniGame) {
+                result = new QQPlatform();
+                this.m_platformData = new QQPlatformData();
+            }
+            else if (Laya.Browser.onQGMiniGame) {
+                result = new OPPOPlatform();
+                this.m_platformData = new OPPOPlatformData();
+            }
+            else if (Laya.Browser.onVVMiniGame) {
+                result = new VIVOPlatform();
+                this.m_platformData = new VIVOPlatformData();
+            }
+            else {
+                console.log(...ConsoleEx.packWarn("未识别平台,默认创建为web", Laya.Browser.userAgent));
+                result = new DefaultPlatform();
+                this.m_platformData = new DefaultPlatformData();
+            }
+            this.m_platformInstance = result;
+            PlatformManagerProxy.instance.PlatformInstance = result;
+            window['$Platform'] = this.m_platformInstance;
+            console.log(...ConsoleEx.packPlatform("平台实例创建完成", PlatformManagerProxy.GetPlatformStr(this.m_platformInstance.platformType)));
+        }
+        initPlatform() {
+            this.m_platformInstance.Init(this.m_platformData);
+            console.log(...ConsoleEx.packPlatform('平台初始化完成'));
+        }
+    }
+
     class FGUI_splash extends fairygui.GComponent {
         constructor() {
             super();
@@ -271,6 +1128,8 @@
             fgui.GRoot.inst.addChild(_ui);
             _ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
             this.asyncTest();
+            PlatformManager.instance.init();
+            PlatformManager.instance.initPlatform();
         }
         asyncTest() {
             return __awaiter(this, void 0, void 0, function* () {
