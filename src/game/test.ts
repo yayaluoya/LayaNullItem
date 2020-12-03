@@ -1,5 +1,6 @@
 import PlatformManager from "../aTGame/Platform/PlatformManager";
 import FGUI_splash from "./FGUI_splash";
+import outline from "./outline.vs";
 
 /**
  * 测试类
@@ -49,11 +50,19 @@ export default class test {
         //平面
         var plane = sprite3D.addChild(new Laya.MeshSprite3D(Laya.PrimitiveMesh.createPlane(6, 6, 10, 10))) as Laya.Sprite3D;
         (plane as Laya.MeshSprite3D).meshRenderer.material = _mat;
+        //
+        _mat.lock = true;
         // 设置包名后缀
         fgui.UIConfig.packageFileExtension = "bin";
         Laya.stage.addChild(fgui.GRoot.inst.displayObject);
         fgui.GRoot.inst.width = Laya.stage.width;
         fgui.GRoot.inst.height = Laya.stage.height;
+        //设置sader
+        let _shaderName: string = 'oneShader';
+        let _sader: Laya.Shader3D = Laya.Shader3D.add(_shaderName, null, null, true);
+        let _material: Laya.Material = (sphere as Laya.MeshSprite3D).meshRenderer.material;
+        Laya.Shader3D.getDefineByName(_shaderName);
+        // console.log(outline);
         //
         fairygui.UIObjectFactory.setPackageItemExtension(FGUI_splash.URL, FGUI_splash);
         //加载初始化UI包
@@ -70,9 +79,9 @@ export default class test {
         //
         console.log(fgui.GRoot.inst);
         //显示UI
-        let _ui: fgui.GObject = FGUI_splash.createInstance();
-        fgui.GRoot.inst.addChild(_ui);
-        _ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
+        // let _ui: fgui.GObject = FGUI_splash.createInstance();
+        // fgui.GRoot.inst.addChild(_ui);
+        // _ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
         //
         this.asyncTest();
         //初始化平台

@@ -1111,10 +1111,15 @@
             cone.meshRenderer.material = _mat;
             var plane = sprite3D.addChild(new Laya.MeshSprite3D(Laya.PrimitiveMesh.createPlane(6, 6, 10, 10)));
             plane.meshRenderer.material = _mat;
+            _mat.lock = true;
             fgui.UIConfig.packageFileExtension = "bin";
             Laya.stage.addChild(fgui.GRoot.inst.displayObject);
             fgui.GRoot.inst.width = Laya.stage.width;
             fgui.GRoot.inst.height = Laya.stage.height;
+            let _shaderName = 'oneShader';
+            let _sader = Laya.Shader3D.add(_shaderName, null, null, true);
+            let _material = sphere.meshRenderer.material;
+            Laya.Shader3D.getDefineByName(_shaderName);
             fairygui.UIObjectFactory.setPackageItemExtension(FGUI_splash.URL, FGUI_splash);
             Laya.loader.load([
                 { url: 'res/FGUI/InitLoad.bin', type: Laya.Loader.BUFFER },
@@ -1124,9 +1129,6 @@
         InitUI() {
             fgui.UIPackage.addPackage('res/FGUI/InitLoad');
             console.log(fgui.GRoot.inst);
-            let _ui = FGUI_splash.createInstance();
-            fgui.GRoot.inst.addChild(_ui);
-            _ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
             this.asyncTest();
             PlatformManager.instance.init();
             PlatformManager.instance.initPlatform();
